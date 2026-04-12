@@ -11,6 +11,7 @@ export enum WorkflowTriggerType {
   MANUAL = 'MANUAL',
   CRON = 'CRON',
   WEBHOOK = 'WEBHOOK',
+  VIEW_EVENT = 'VIEW_EVENT',
 }
 
 type BaseWorkflowTriggerSettings = {
@@ -87,8 +88,16 @@ export type WorkflowWebhookTrigger = BaseTrigger & {
     );
 };
 
+export type WorkflowViewEventTrigger = BaseTrigger & {
+  type: WorkflowTriggerType.VIEW_EVENT;
+  settings: BaseWorkflowTriggerSettings & {
+    objectType: string;
+  };
+};
+
 export type WorkflowTrigger =
   | WorkflowDatabaseEventTrigger
   | WorkflowManualTrigger
   | WorkflowCronTrigger
-  | WorkflowWebhookTrigger;
+  | WorkflowWebhookTrigger
+  | WorkflowViewEventTrigger;

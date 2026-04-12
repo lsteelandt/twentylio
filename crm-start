@@ -1,0 +1,107 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+STATE_DIR=".crm"
+LOG_DIR=".crm/logs"
+
+mkdir -p "$STATE_DIR"
+mkdir -p "$LOG_DIR"
+
+echo "▶️  Démarrage PostgreSQL (si pas déjà lancé)..."
+brew services start postgresql@16 >/dev/null 2>&1 || true
+
+echo "▶️  Vérification / démarrage Redis..."
+if redis-cli -p 6379 ping >/dev/null 2>&1; then
+  echo "   Redis déjà actif sur 6379"
+  rm -f "$STATE_DIR/redis.pid"
+else
+  echo "   Lancement de redis..."
+  nohup redis-server \
+    --port 6379 \
+    --save '' \
+    --appendonly no \
+    --maxmemory-policy noeviction \
+    >"$LOG_DIR/redis.log" 2>&1 &
+  echo $! > "$STATE_DIR/redis.pid"
+  sleep 2
+  if kill -0 "$(cat "$STATE_DIR/redis.pid")" 2>/dev/null; then
+    echo "   ✅ redis démarré (PID $(cat "$STATE_DIR/redis.pid"))"
+  else
+    echo "   ❌ Échec démarrage redis"
+    echo "      Voir log : $LOG_DIR/redis.log"
+    exit 1
+  fi
+fi
+
+start_proc() {
+  local name="$1"
+  local pid_file="$STATE_DIR/$2.pid"
+  local cmd="$3"
+  local log="$LOG_DIR/$2.log"
+
+  if [ -f "$pid_file" ] && kill -0 "$(cat "$pid_file")" 2>/dev/null; then
+    echo "▶️  $name déjà actif (PID $(cat "$pid_file"))"
+    return 0
+  fi
+
+  rm -f "$pid_file"
+  echo "▶️  Lancement de $name..."
+  # shellcheck disable=SC2086
+  nohup $cmd >"$log" 2>&1 &
+  echo $! > "$pid_file"
+  sleep 2
+  if kill -0 "$(cat "$pid_file")" 2>/dev/null; then
+    echo "   ✅ $name démarré (PID $(cat "$pid_file"))"
+  else
+    echo "   ❌ Échec démarrage $name"
+    echo "      Voir log : $log"
+    exit 1
+  fi
+}
+
+# Front
+start_proc "front" "front" "npx nx start twenty-front"
+
+# Server
+start_proc "server" "server" "yarn workspace twenty-server start:prod"
+
+# Worker
+start_proc "worker" "worker" "yarn workspace twenty-server worker:prod"
+
+echo "⏳ Vérification des ports 3000 et 3001..."
+timeout_at=$((SECONDS + 60))
+
+while [ "$SECONDS" -lt "$timeout_at" ]; do
+  if lsof -nP -iTCP:3000 -sTCP:LISTEN 2>/dev/null | grep -q LISTEN && \
+     lsof -nP -iTCP:3001 -sTCP:LISTEN 2>/dev/null | grep -q LISTEN; then
+    echo "✅ Twenty prêt"
+    echo "   Front  : http://localhost:3001"
+    echo "   Server : http://localhost:3000"
+    echo
+    ./crm-status || true
+
+    echo
+    echo "🔧 Enregistrement des cron jobs..."
+    yarn workspace twenty-server command:prod cron:register:all
+    echo
+
+    echo "🔎 Vérification des cron BullMQ (queues cron)..."
+    echo "   REPEATABLE JOBS :"
+    redis-cli zrange bull:cron-queue:repeat 0 -1 WITHSCORES || true
+    echo
+    echo "   DELAYED CRON JOBS :"
+    redis-cli zrange bull:cron-queue:delayed 0 -1 WITHSCORES || true
+    echo
+
+    exit 0
+  fi
+  sleep 1
+done
+
+echo "⚠️  Démarrage incomplet après 60 secondes"
+echo "Logs utiles :"
+echo "  tail -n 100 $LOG_DIR/front.log"
+echo "  tail -n 100 $LOG_DIR/server.log"
+echo "  tail -n 100 $LOG_DIR/worker.log"
+exit 1
+

@@ -133,6 +133,7 @@ export default defineConfig(({ mode }) => {
     ],
 
     optimizeDeps: {
+      include: ['@react-spring/web'],
       exclude: [
         '../../node_modules/.vite',
         '../../node_modules/.cache',

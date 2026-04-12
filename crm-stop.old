@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+STATE_DIR=".crm"
+
+kill_pid_file() {
+  local name="$1"
+  local pid_file="$STATE_DIR/$2.pid"
+
+  if [ -f "$pid_file" ]; then
+    local pid
+    pid="$(cat "$pid_file")"
+    if kill -0 "$pid" 2>/dev/null; then
+      echo "- Arrêt $name (PID $pid)..."
+      kill "$pid" 2>/dev/null || true
+      for _ in {1..10}; do
+        kill -0 "$pid" 2>/dev/null || break
+        sleep 1
+      done
+      kill -9 "$pid" 2>/dev/null || true
+    fi
+    rm -f "$pid_file"
+  fi
+}
+
+echo "🛑 Arrêt du CRM..."
+
+kill_pid_file "worker" "worker"
+kill_pid_file "server" "server"
+kill_pid_file "front" "front"
+
+echo "🔎 Nettoyage des process résiduels..."
+pkill -f "queue-worker" 2>/dev/null || true
+pkill -f "twenty-server" 2>/dev/null || true
+pkill -f "twenty-front" 2>/dev/null || true
+sleep 1
+kill $(lsof -t -i:3000) 2>/dev/null || true
+kill $(lsof -t -i:3001) 2>/dev/null || true
+sleep 1
+
+echo "🔎 Arrêt de Redis (en dernier)..."
+kill_pid_file "redis" "redis"
+redis-cli -p 6379 shutdown nosave 2>/dev/null || true
+
+echo "✅ Arrêt terminé."
+lsof -nP -iTCP:3000 -sTCP:LISTEN 2>/dev/null | grep -v WARNING || echo "  Port 3000 : libre"
+lsof -nP -iTCP:3001 -sTCP:LISTEN 2>/dev/null | grep -v WARNING || echo "  Port 3001 : libre"

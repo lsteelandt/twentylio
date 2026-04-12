@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+STATE_DIR=".crm"
+LOG_DIR=".crm/logs"
+
+mkdir -p "$STATE_DIR"
+mkdir -p "$LOG_DIR"
+
+echo "▶️  Démarrage PostgreSQL (si pas déjà lancé)..."
+brew services start postgresql@16 >/dev/null 2>&1 || true
+
+if redis-cli -p 6379 ping >/dev/null 2>&1; then
+  echo "▶️  Redis déjà actif sur 6379"
+  rm -f "$STATE_DIR/redis.pid"
+else
+  echo "▶️  Lancement de redis..."
+  nohup redis-server --port 6379 --save '' --appendonly no --maxmemory-policy noeviction >"$LOG_DIR/redis.log" 2>&1 &
+  echo $! > "$STATE_DIR/redis.pid"
+  sleep 2
+  if kill -0 "$(cat "$STATE_DIR/redis.pid")" 2>/dev/null; then
+    echo "✅ redis démarré (PID $(cat "$STATE_DIR/redis.pid"))"
+  else
+    echo "❌ Échec démarrage redis"
+    echo "Voir log : $LOG_DIR/redis.log"
+    exit 1
+  fi
+fi
+
+if [ -f "$STATE_DIR/front.pid" ] && kill -0 "$(cat "$STATE_DIR/front.pid")" 2>/dev/null; then
+  echo "▶️  front déjà actif (PID $(cat "$STATE_DIR/front.pid"))"
+else
+  rm -f "$STATE_DIR/front.pid"
+  echo "▶️  Lancement de front..."
+  nohup npx nx start twenty-front >"$LOG_DIR/front.log" 2>&1 &
+  echo $! > "$STATE_DIR/front.pid"
+  sleep 2
+  if kill -0 "$(cat "$STATE_DIR/front.pid")" 2>/dev/null; then
+    echo "✅ front démarré (PID $(cat "$STATE_DIR/front.pid"))"
+  else
+    echo "❌ Échec démarrage front"
+    echo "Voir log : $LOG_DIR/front.log"
+    exit 1
+  fi
+fi
+
+if [ -f "$STATE_DIR/server.pid" ] && kill -0 "$(cat "$STATE_DIR/server.pid")" 2>/dev/null; then
+  echo "▶️  server déjà actif (PID $(cat "$STATE_DIR/server.pid"))"
+else
+  rm -f "$STATE_DIR/server.pid"
+  echo "▶️  Lancement de server..."
+  nohup env DISABLE_CRON_JOBS_REGISTRATION=false yarn workspace twenty-server start:prod >"$LOG_DIR/server.log" 2>&1 &
+  echo $! > "$STATE_DIR/server.pid"
+  sleep 2
+  if kill -0 "$(cat "$STATE_DIR/server.pid")" 2>/dev/null; then
+    echo "✅ server démarré (PID $(cat "$STATE_DIR/server.pid"))"
+  else
+    echo "❌ Échec démarrage server"
+    echo "Voir log : $LOG_DIR/server.log"
+    exit 1
+  fi
+fi
+
+if [ -f "$STATE_DIR/worker.pid" ] && kill -0 "$(cat "$STATE_DIR/worker.pid")" 2>/dev/null; then
+  echo "▶️  worker déjà actif (PID $(cat "$STATE_DIR/worker.pid"))"
+else
+  rm -f "$STATE_DIR/worker.pid"
+  echo "▶️  Lancement de worker..."
+  nohup env DISABLE_CRON_JOBS_REGISTRATION=true yarn workspace twenty-server worker:prod >"$LOG_DIR/worker.log" 2>&1 &
+  echo $! > "$STATE_DIR/worker.pid"
+  sleep 2
+  if kill -0 "$(cat "$STATE_DIR/worker.pid")" 2>/dev/null; then
+    echo "✅ worker démarré (PID $(cat "$STATE_DIR/worker.pid"))"
+  else
+    echo "❌ Échec démarrage worker"
+    echo "Voir log : $LOG_DIR/worker.log"
+    exit 1
+  fi
+fi
+
+echo "⏳ Vérification des ports 3000 et 3001..."
+timeout_at=$((SECONDS + 60))
+
+while [ "$SECONDS" -lt "$timeout_at" ]; do
+  if lsof -nP -iTCP:3000 -sTCP:LISTEN 2>/dev/null | grep -q LISTEN && \
+     lsof -nP -iTCP:3001 -sTCP:LISTEN 2>/dev/null | grep -q LISTEN; then
+    echo "✅ Twenty prêt"
+    echo "   Front  : http://localhost:3001"
+    echo "   Server : http://localhost:3000"
+    echo
+    ./crm-status
+    exit 0
+  fi
+  sleep 1
+done
+
+echo "⚠️  Démarrage incomplet après 60 secondes"
+echo "Logs utiles :"
+echo "tail -n 100 $LOG_DIR/front.log"
+echo "tail -n 100 $LOG_DIR/server.log"
+echo "tail -n 100 $LOG_DIR/worker.log"
+exit 1
+
