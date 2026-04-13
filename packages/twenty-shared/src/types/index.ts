@@ -162,6 +162,12 @@ export { OrderByDirection } from './ObjectRecordGroupBy';
 export { ObjectRecordGroupByDateGranularity } from './ObjectRecordGroupByDateGranularity';
 export type { ObjectsPermissions } from './ObjectsPermissions';
 export type { ObjectsPermissionsByRoleId } from './ObjectsPermissionsByRoleId';
+export type {
+  ObjectRecordField,
+  ObjectRecordId,
+  ObjectWorkspaceService,
+  objectWorkspaceService,
+} from './ObjectWorkspaceService.type';
 export type { OrderBy } from './OrderBy';
 export type {
   ChartRecordFilter,

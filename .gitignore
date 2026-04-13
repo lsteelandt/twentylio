@@ -58,3 +58,7 @@ output/playwright/
 .nx/polygraph
 .claude/worktrees
 .claude/settings.local.json
+.claude/commands
+.claude/skills
+
+

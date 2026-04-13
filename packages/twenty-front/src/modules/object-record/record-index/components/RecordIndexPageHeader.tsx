@@ -3,10 +3,9 @@ import { SidePanelToggleButton } from '@/side-panel/components/SidePanelToggleBu
 import { MAIN_CONTEXT_STORE_INSTANCE_ID } from '@/context-store/constants/MainContextStoreInstanceId';
 import { contextStoreCurrentViewIdComponentState } from '@/context-store/states/contextStoreCurrentViewIdComponentState';
 import { contextStoreNumberOfSelectedRecordsComponentState } from '@/context-store/states/contextStoreNumberOfSelectedRecordsComponentState';
-import { contextStoreTargetedRecordsRuleComponentState } from '@/context-store/states/contextStoreTargetedRecordsRuleComponentState';
 import { isLayoutCustomizationModeEnabledState } from '@/layout-customization/states/isLayoutCustomizationModeEnabledState';
 import { useFilteredObjectMetadataItems } from '@/object-metadata/hooks/useFilteredObjectMetadataItems';
-import { RecordIndexPageHeaderAccount360Button } from '@/object-record/record-index/components/RecordIndexPageHeaderAccount360Button';
+
 import { RecordIndexPageHeaderIcon } from '@/object-record/record-index/components/RecordIndexPageHeaderIcon';
 import { useRecordIndexContextOrThrow } from '@/object-record/record-index/contexts/RecordIndexContext';
 import { PageHeader } from '@/ui/layout/page/components/PageHeader';
@@ -41,9 +40,6 @@ export const RecordIndexPageHeader = () => {
     contextStoreNumberOfSelectedRecordsComponentState,
   );
 
-  const contextStoreTargetedRecordsRule = useAtomComponentStateValue(
-    contextStoreTargetedRecordsRuleComponentState,
-  );
 
   const { objectNamePlural } = useRecordIndexContextOrThrow();
 
@@ -73,13 +69,6 @@ export const RecordIndexPageHeader = () => {
     isLayoutCustomizationModeEnabledState,
   );
 
-  const singleSelectedCompanyId =
-    objectNamePlural === 'companies' &&
-    contextStoreNumberOfSelectedRecords === 1 &&
-    contextStoreTargetedRecordsRule.mode === 'selection'
-      ? contextStoreTargetedRecordsRule.selectedRecordIds[0]
-      : null;
-
   return (
     <PageHeader
       title={pageHeaderTitle}
@@ -87,11 +76,6 @@ export const RecordIndexPageHeader = () => {
         <RecordIndexPageHeaderIcon objectMetadataItem={objectMetadataItem} />
       )}
     >
-      {isDefined(singleSelectedCompanyId) && (
-        <RecordIndexPageHeaderAccount360Button
-          objectRecordId={singleSelectedCompanyId}
-        />
-      )}
       {isDefined(contextStoreCurrentViewId) && (
         <>
           <RecordIndexCommandMenu />
