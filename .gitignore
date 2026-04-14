@@ -61,4 +61,4 @@ output/playwright/
 .claude/commands
 .claude/skills
 
-
+.crm/*
