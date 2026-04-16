@@ -28269,7 +28269,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wyw-in-js/vite@npm:^0.7.0":
+"@wyw-in-js/vite@npm:0.7.0":
   version: 0.7.0
   resolution: "@wyw-in-js/vite@npm:0.7.0"
   dependencies:
@@ -61112,7 +61112,7 @@ __metadata:
     "@vitest/coverage-istanbul": "npm:^4.0.18"
     "@vitest/coverage-v8": "npm:^4.0.18"
     "@wyw-in-js/babel-preset": "npm:^1.0.6"
-    "@wyw-in-js/vite": "npm:^0.7.0"
+    "@wyw-in-js/vite": "npm:0.7.0"
     "@yarnpkg/types": "npm:^4.0.0"
     archiver: "npm:^7.0.1"
     chromatic: "npm:^6.18.0"

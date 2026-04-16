@@ -19,6 +19,7 @@ import { KPIsSection } from './components/KPIsSection';
 import { Account360FilteredTable } from './components/Account360FilteredTable';
 import { Account360MobileLayout } from './components/Account360MobileLayout';
 import { MobileActions } from './components/MobileActions';
+import { Account360ViewButton } from './components/Account360ViewButton';
 
 // Simple error boundary to isolate section crashes
 class SectionErrorBoundary extends Component<{
@@ -118,7 +119,7 @@ export const Account360View = () => {
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [objectRecordId]);
 
   const handleEnrichCompany = async () => {
     try {
@@ -269,6 +270,7 @@ export const Account360View = () => {
               <IconSparkles />
               {loading ? 'Enrichissement...' : 'Enrichir avec IA'}
             </StyledEnrichButton>
+            <Account360ViewButton objectRecordId={objectRecordId} />
             {success && (
               <StyledFeedbackSuccess>
                 Enrichissement réussi

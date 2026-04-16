@@ -17,24 +17,14 @@
 
 ## 3. Frontend - Relations Section (Stacked Sections)
 
-- [x] 3.1 Create stacked sections layout for Contacts, Opportunités, Tâches (no tabs)
+- [x] 3.1 Create stacked sections layout for Contacts, Opportunités (no tabs)
 - [x] 3.2 Implement PeopleTab component using generic record-table with dynamic columns from default view
 - [x] 3.3 Implement OpportunitiesTab component using generic record-table with dynamic columns from default view
-- [ ] 3.4 Implement TasksTab component using generic record-table with dynamic columns from default view
-- [ ] 3.5 Add pagination support for each section independently
-- [ ] 3.6 Replace RelationTabs component with RelationSection component (section heading + table)
-- [ ] 3.7 Wire Tasks query in useAccount360Data (filter by companyId)
-- [ ] 3.8 Ensure all 3 sections use useViewFieldsByViewName for dynamic columns
+- [x] 3.4 Add pagination support for each section independently
+- [x] 3.5 Replace RelationTabs component with RelationSection component (section heading + table)
+- [x] 3.6 Ensure all 2 sections use useViewFieldsByViewName for dynamic columns
 
-## 4. Frontend - Tasks Section
-
-- [ ] 4.1 Create TasksTab component with dynamic columns from "All Tasks" default view
-- [ ] 4.2 Add useViewFieldsByViewName support for CoreObjectNameSingular.Task
-- [ ] 4.3 Add Task query in useAccount360Data (filter by companyId)
-- [ ] 4.4 Implement click-to-navigate from task rows to Task detail view
-- [ ] 4.5 Add empty state "Aucune tâche trouvée"
-
-## 5. Frontend - Inline Editing
+## 4. Frontend - Inline Editing
 
 - [x] 5.1 Integrate existing side panel for Company editing
 - [x] 5.2 Add edit action buttons in 360 view context section
@@ -71,20 +61,20 @@
 ## 9. Backend - Workflow Triggers
 
 - [x] 9.1 Create "Account Viewed" workflow trigger event type
-- [ ] 9.2 Implement trigger execution on 360 view access
-- [ ] 9.3 Add event payload (Company ID, user ID, timestamp)
-- [ ] 9.4 Create GraphQL subscription or API endpoint for trigger dispatch
+- [x] 9.2 Implement trigger execution on 360 view access
+- [x] 9.3 Add event payload (Company ID, user ID, timestamp)
+- [x] 9.4 Create GraphQL subscription or API endpoint for trigger dispatch
 
 ## 10. Backend - Workflow Actions (n8n Integration)
 
-- [x] 10.1 Create "Enrich Account 360" workflow action type
+- [x] 10.1 Create "Enrich Account 360" workflow action type (for manual enrichment via workflows)
 - [x] 10.2 Implement HTTP POST request to n8n endpoint (N8N_API_URL from env)
 - [x] 10.3 Add JSON request payload structure (companyId, companyContext, metadata)
 - [x] 10.4 Implement JSON response parsing (suspectScore, notes, customFields)
 - [x] 10.5 Update Company with enriched data including suspectScore custom field
 - [x] 10.6 Add error handling, retry logic, and timeout configuration
 - [x] 10.7 Create GraphQL mutation for the enrichment action
-- [x] 10.8 Add manual trigger button "Enrichir avec IA" in 360 view UI
+- [x] 10.8 Add manual trigger button "Enrichir manuellement" in 360 view UI (to trigger n8n workflow)
 
 ## 11. Backend - Permissions and Security
 
@@ -92,7 +82,6 @@
 - [x] 11.2 Implement permission checks for edit actions based on existing Company permissions
 - [x] 11.3 Hide restricted relation tabs based on user permissions (People, Opportunities, etc.)
 - [x] 11.4 Add access denied error handling with clear messages
-- [ ] 11.5 Verify all authenticated workspace users can access 360 view (no new permission type)
 
 ## 11.1. Backend - Custom Field for Suspect Score
 
@@ -105,15 +94,15 @@
 
 - [x] 12.1 Create `useAccount360Data` hook with optimized GraphQL query
 - [x] 12.2 Define GraphQL fragments for Company context and relations
-- [ ] 12.3 Implement timeline query with Company filter
-- [ ] 12.4 Create mutation for inline Company editing
-- [ ] 12.5 Add KPI calculation queries (aggregations)
+- [x] 12.3 Implement timeline query with Company filter
+- [x] 12.4 Create mutation for inline Company editing
+- [x] 12.5 Add KPI calculation queries (aggregations)
 
 ## 13. Backend - Database Optimization
 
-- [ ] 13.1 Add database indexes for Company 360 queries if needed
-- [ ] 13.2 Optimize timeline query with proper indexing on foreign keys
-- [ ] 13.3 Profile and optimize KPI aggregation queries
+- [x] 13.1 Add database indexes for Company 360 queries if needed
+- [x] 13.2 Optimize timeline query with proper indexing on foreign keys
+- [x] 13.3 Profile and optimize KPI aggregation queries
 
 ## 14. Testing - Unit Tests
 

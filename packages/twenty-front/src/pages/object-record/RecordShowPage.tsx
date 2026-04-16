@@ -17,6 +17,7 @@ import { PageContainer } from '@/ui/layout/page/components/PageContainer';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { RecordShowPageHeader } from '~/pages/object-record/RecordShowPageHeader';
 import { RecordShowPageTitle } from '~/pages/object-record/RecordShowPageTitle';
+import { Account360ViewButton } from '@/companies/account-360/components/Account360ViewButton';
 
 export const RecordShowPage = () => {
   const isLayoutCustomizationModeEnabled = useAtomStateValue(
@@ -57,6 +58,9 @@ export const RecordShowPage = () => {
             >
               <RecordShowCommandMenu />
               {!isLayoutCustomizationModeEnabled && <SidePanelToggleButton />}
+              {objectNameSingular === 'company' && (
+                <Account360ViewButton objectRecordId={objectRecordId} />
+              )}
             </RecordShowPageHeader>
             <MainContainerLayoutWithSidePanel>
               <TimelineActivityContext.Provider

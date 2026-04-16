@@ -20,7 +20,7 @@ Twenty a déjà des objets Company avec des relations vers Person, Opportunity, 
 **Goals :**
 - Fournir une vue 360° des comptes centralisant toutes les informations contextuelles
 - Permettre la configuration flexible de la vue via Page Layouts
-- Intégrer les workflows pour l'enrichissement automatique des données 360°
+- Intégrer les workflows pour l'enrichissement des données 360° via déclenchement manuel
 - Offrir une timeline consolidée de toutes les activités liées au compte
 - Exposer des KPIs spécifiques par compte
 - Maintenir une cohérence visuelle avec l'expérience Twenty existante
@@ -30,6 +30,7 @@ Twenty a déjà des objets Company avec des relations vers Person, Opportunity, 
 - Modification du système de permissions existant
 - Changement de l'architecture de base du metadata engine
 - Personnalisation par utilisateur de la vue 360° (configuration au niveau workspace)
+- Enrichissement automatique par IA des données de compte
 
 ## Decisions
 
@@ -49,7 +50,7 @@ Twenty a déjà des objets Company avec des relations vers Person, Opportunity, 
 
 ### 2. Organisation de la vue 360°
 
-**Choix :** Layout en sections verticales empilées, sans onglets. Les trois objets relationnés (Contacts, Opportunités, Tâches) sont affichés l'un après l'autre sur la même page, avec scroll vertical.
+**Choix :** Layout en sections verticales empilées, sans onglets. Les deux objets relationnés (Contacts, Opportunités) sont affichés l'un après l'autre sur la même page, avec scroll vertical.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -72,12 +73,6 @@ Twenty a déjà des objets Company avec des relations vers Person, Opportunity, 
 │  ┌──────────────────────────────────────────────────────────┐   │
 │  │ Colonnes de la vue par défaut "All Opportunities"        │   │
 │  │ (Nom, Étape, Montant, Date clôture, etc.)                │   │
-│  └──────────────────────────────────────────────────────────┘   │
-│                                                                 │
-│  ── Tâches ─────────────────────────────────────────────────    │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │ Colonnes de la vue par défaut "All Tasks"                │   │
-│  │ (Titre, Statut, Due date, etc.)                          │   │
 │  └──────────────────────────────────────────────────────────┘   │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
@@ -106,7 +101,7 @@ AND vf."isActive" = true
 ORDER BY vf.position ASC;
 ```
 
-Cette requête est exécutée côté frontend via le hook `useViewFieldsByViewName` pour chaque objet (Person, Opportunity, Task).
+Cette requête est exécutée côté frontend via le hook `useViewFieldsByViewName` pour chaque objet (Person, Opportunity).
 
 ### 3. Chargement des données 360°
 
@@ -228,21 +223,15 @@ Cette requête est exécutée côté frontend via le hook `useViewFieldsByViewNa
 
 **Décision :** Afficher deux KPIs :
 1. **Nombre d'activités sur le compte** : Compte total des activités liées au compte sur la période configurée (par défaut : 30 jours)
-2. **Suspect scoring (IA-assisté)** : Score de maturité du prospect, de 0 à 5
+2. **Suspect scoring** : Score de maturité du prospect, de 0 à 5 (renseigné via workflows n8n)
 
 **Format du Suspect scoring :**
 - **0** : Pas d'information disponible (score non calculable)
 - **1 à 5** : Échelle de maturité (1 = très bas / 5 = très mature)
 
-**Fonctionnalité IA-assistée :**
-- Le score sera renseigné via une fonctionnalité d'enrichissement assistée par l'IA
-- L'IA effectue de l'OSINT (Open Source Intelligence) sur le compte pour détecter des traces de besoins
-- Le scoring peut être déclenché manuellement ou automatiquement via workflow n8n
-
-**Sources OSINT potentielles :**
-- Vérification de présence sur LinkedIn, Crunchbase, etc.
-- Détection de traces d'achats, de recrutement, de besoins techniques
-- Analyse de maturité digitale (site web, réseaux sociaux)
+**Mise à jour du Suspect scoring :**
+- Le score sera renseigné via des workflows n8n déclenchés manuellement par l'utilisateur
+- Les workflows peuvent intégrer des enrichissements externes (OSINT, APIs tierces) pour calculer le score
 
 ### Intégration n8n
 
@@ -260,7 +249,7 @@ Cette requête est exécutée côté frontend via le hook `useViewFieldsByViewNa
     "suspectScore": "number | null"
   },
   "metadata": {
-    "triggeredBy": "manual" | "workflow",
+    "triggeredBy": "manual",
     "timestamp": "ISO-8601"
   }
 }
@@ -283,9 +272,9 @@ Cette requête est exécutée côté frontend via le hook `useViewFieldsByViewNa
 ```
 
 **Flux d'enrichissement :**
-1. Trigger : User clic sur bouton "Enrichir avec IA" ou workflow automatique
+1. Trigger : User clic sur bouton "Enrichir manuellement" (déclenche workflow n8n)
 2. Request : Twenty envoie JSON vers n8n (avec contexte)
-3. Processing : n8n exécute workflow IA + OSINT
+3. Processing : n8n exécute workflow configuré (peut inclure OSINT, enrichissement externe, etc.)
 4. Response : n8n retourne données enrichies (score, notes, custom fields)
 5. Update : Twenty met à jour le Company avec nouvelles données
 
