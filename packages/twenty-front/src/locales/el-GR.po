@@ -677,6 +677,11 @@ msgstr "Σχετικά με αυτόν τον χρήστη"
 msgid "About this workspace"
 msgstr "Σχετικά με αυτό το χώρο εργασίας"
 
+#. js-lingui-id: LuXP9q
+#: src/pages/settings/applications/tabs/SettingsApplicationsDeveloperTab.tsx
+msgid "Access"
+msgstr ""
+
 #. js-lingui-id: pNW+Rt
 #: src/pages/settings/admin-panel/SettingsAdminNewAiProvider.tsx
 msgid "Access Key ID"
@@ -785,7 +790,7 @@ msgstr "Ενέργειες χρηστών που μπορούν να εκτελ�
 #: src/modules/settings/data-model/objects/components/SettingsObjectInactiveMenuDropDown.tsx
 #: src/modules/settings/data-model/object-details/components/SettingsObjectFieldDisabledActionDropdown.tsx
 #: src/modules/settings/components/SettingsEnterpriseFeatureGateCard.tsx
-#: src/modules/information-banner/components/enterprise/InformationBannerLegacyEnterpriseKey.tsx
+#: src/modules/information-banner/components/enterprise/InformationBannerInvalidEnterpriseKey.tsx
 msgid "Activate"
 msgstr "Ενεργοποίηση"
 
@@ -1211,6 +1216,7 @@ msgstr ""
 #: src/pages/settings/admin-panel/SettingsAdminNewAiModel.tsx
 #: src/pages/settings/admin-panel/SettingsAdminIndicatorHealthStatus.tsx
 #: src/pages/settings/admin-panel/SettingsAdminConfigVariableDetails.tsx
+#: src/pages/settings/admin-panel/SettingsAdminApplicationRegistrationDetail.tsx
 #: src/pages/settings/admin-panel/SettingsAdminAiProviderDetail.tsx
 #: src/pages/settings/admin-panel/SettingsAdmin.tsx
 #: src/pages/settings/admin-panel/SettingsAdmin.tsx
@@ -1750,6 +1756,7 @@ msgstr "Παρουσιάστηκε σφάλμα κατά τη μεταφόρτω
 #: src/modules/ui/feedback/snack-bar-manager/hooks/useSnackBar.ts
 #: src/modules/page-layout/hooks/useUpdatePageLayoutWithTabsAndWidgets.ts
 #: src/modules/page-layout/hooks/useResetPageLayoutWidgetToDefault.ts
+#: src/modules/page-layout/hooks/useResetPageLayoutToDefault.ts
 #: src/modules/page-layout/hooks/useResetPageLayoutTabToDefault.ts
 #: src/modules/object-metadata/hooks/useUpdateOneObjectMetadataItem.ts
 #: src/modules/object-metadata/hooks/useUpdateOneFieldMetadataItem.ts
@@ -1780,7 +1787,6 @@ msgstr "Υπάρχει ήδη αντικείμενο με αυτό το όνομ
 
 #. js-lingui-id: lxentK
 #: src/modules/settings/playground/components/PlaygroundSetupForm.tsx
-#: src/modules/ai/utils/extractErrorMessage.ts
 msgid "An unexpected error occurred"
 msgstr "Παρουσιάστηκε ένα απρόβλεπτο σφάλμα"
 
@@ -1947,6 +1953,11 @@ msgstr "Εφαρμογή"
 #: src/pages/settings/applications/tabs/SettingsApplicationRegistrationGeneralTab.tsx
 msgid "App installed on this workspace"
 msgstr "Η εφαρμογή είναι εγκατεστημένη σε αυτόν τον χώρο εργασίας"
+
+#. js-lingui-id: r5g1bX
+#: src/pages/settings/admin-panel/SettingsAdminApplicationRegistrationDetail.tsx
+msgid "App registrations"
+msgstr ""
 
 #. js-lingui-id: aAIQg2
 #: src/pages/settings/profile/appearance/components/SettingsExperience.tsx
@@ -3178,7 +3189,6 @@ msgstr "Το Πρόχειρο απαιτεί ασφαλή σύνδεση (HTTPS)
 
 #. js-lingui-id: yz7wBu
 #: src/modules/ui/feedback/snack-bar-manager/components/SnackBar.tsx
-#: src/modules/side-panel/components/SidePanelToggleButton.tsx
 msgid "Close"
 msgstr "Κλείσιμο"
 
@@ -3189,7 +3199,6 @@ msgid "Close banner"
 msgstr "Κλείσιμο banner"
 
 #. js-lingui-id: saip/v
-#: src/modules/ui/layout/page-header/components/PageHeaderToggleSidePanelButton.tsx
 #: src/modules/side-panel/components/SidePanelToggleButton.tsx
 msgid "Close side panel"
 msgstr "Κλείσιμο πλευρικού πάνελ"
@@ -3569,9 +3578,7 @@ msgid "Content"
 msgstr "Περιεχόμενο"
 
 #. js-lingui-id: M73whl
-#: src/modules/side-panel/pages/root/components/SidePanelRootPage.tsx
 #: src/modules/settings/ai/components/SettingsAiModelHoverCard.tsx
-#: src/modules/command-menu-item/display/components/SidePanelCommandMenuItemDisplayPage.tsx
 #: src/modules/ai/components/RoutingDebugDisplay.tsx
 msgid "Context"
 msgstr "Περιβάλλον"
@@ -4949,6 +4956,11 @@ msgstr "Προγραμματιστής"
 msgid "Developers links"
 msgstr "Σύνδεσμοι προγραμματιστών"
 
+#. js-lingui-id: E/QGRL
+#: src/modules/page-layout/components/PageLayoutTabListNewTabDropdownContent.tsx
+msgid "Disabled"
+msgstr ""
+
 #. js-lingui-id: Xm/s+u
 #: src/modules/settings/accounts/components/SettingsAccountsCalendarChannelsGeneral.tsx
 msgid "Display"
@@ -4985,8 +4997,8 @@ msgid "Display text on multiple lines"
 msgstr "Εμφανίστε το κείμενο σε πολλαπλές γραμμές"
 
 #. js-lingui-id: vU/Hht
-#: src/pages/settings/applications/SettingsApplicationRegistrationDetails.tsx
 #: src/pages/settings/applications/tabs/SettingsApplicationRegistrationDistributionTab.tsx
+#: src/pages/settings/applications/components/SettingsApplicationRegistrationContent.tsx
 msgid "Distribution"
 msgstr "Διανομή"
 
@@ -5590,6 +5602,11 @@ msgstr "Άδειο Γραμματοκιβώτιο"
 #: src/modules/ai/components/RoutingDebugDisplay.tsx
 msgid "Empty Object"
 msgstr "Κενό Αντικείμενο"
+
+#. js-lingui-id: 7A0K1Y
+#: src/modules/page-layout/components/PageLayoutTabListNewTabDropdownContent.tsx
+msgid "Empty tab"
+msgstr ""
 
 #. js-lingui-id: q11Dk2
 #: src/modules/settings/roles/role-permissions/permission-flags/hooks/useSettingsRolePermissionFlagConfig.ts
@@ -7110,8 +7127,8 @@ msgstr "Διάγραμμα δείκτη"
 #. js-lingui-id: Weq9zb
 #: src/pages/settings/SettingsWorkspace.tsx
 #: src/pages/settings/SettingsWorkspace.tsx
-#: src/pages/settings/applications/SettingsApplicationRegistrationDetails.tsx
 #: src/pages/settings/applications/tabs/SettingsApplicationRegistrationGeneralTab.tsx
+#: src/pages/settings/applications/components/SettingsApplicationRegistrationContent.tsx
 #: src/modules/settings/hooks/useSettingsNavigationItems.tsx
 #: src/modules/settings/admin-panel/components/SettingsAdminContent.tsx
 #: src/modules/page-layout/widgets/fields/hooks/useFieldsWidgetGroupsForDisplay.ts
@@ -7164,11 +7181,6 @@ msgstr "Αξιοποιείστε τον χώρο εργασίας σας με τ
 #: src/pages/onboarding/internal/ChooseYourPlanContent.tsx
 msgid "Get your subscription"
 msgstr "Αποκτήστε τη συνδρομή σας"
-
-#. js-lingui-id: 2GT3Hf
-#: src/modules/side-panel/pages/root/components/SidePanelRootPage.tsx
-msgid "Global"
-msgstr "Παγκόσμιο"
 
 #. js-lingui-id: sr0UJD
 #: src/pages/settings/security/event-logs/SettingsEventLogs.tsx
@@ -9267,7 +9279,6 @@ msgstr ""
 #. js-lingui-id: 2FYpfJ
 #: src/pages/settings/ai/SettingsAI.tsx
 #: src/modules/ui/layout/tab-list/components/TabMoreButton.tsx
-#: src/modules/side-panel/components/SidePanelToggleButton.tsx
 msgid "More"
 msgstr "Περισσότερα"
 
@@ -9651,6 +9662,20 @@ msgstr "Νέα ρύθμιση SSO"
 #: src/pages/settings/security/SettingsSecuritySSOIdentifyProvider.tsx
 msgid "New SSO provider"
 msgstr "Νέος πάροχος SSO"
+
+#. js-lingui-id: 3YvS+c
+#: src/modules/page-layout/components/PageLayoutTabListNewTabDropdownContent.tsx
+msgid "New tab"
+msgstr ""
+
+#. js-lingui-id: Db+TX4
+#: src/modules/page-layout/components/PageLayoutTabList.tsx
+#: src/modules/page-layout/components/PageLayoutTabList.tsx
+#: src/modules/page-layout/components/PageLayoutTabList.tsx
+#: src/modules/page-layout/components/PageLayoutTabList.tsx
+#: src/modules/page-layout/components/PageLayoutTabList.tsx
+msgid "New Tab"
+msgstr ""
 
 #. js-lingui-id: wl18ST
 #: src/modules/activities/tasks/components/TaskGroups.tsx
@@ -10346,6 +10371,11 @@ msgstr "Σημείωση"
 msgid "Notes"
 msgstr "Σημειώματα"
 
+#. js-lingui-id: DYCPYF
+#: src/modules/page-layout/widgets/components/StandaloneWidgetPlaceholder.tsx
+msgid "Nothing to see"
+msgstr ""
+
 #. js-lingui-id: YwzE9K
 #: src/utils/date-utils.ts
 #: src/utils/date-utils.ts
@@ -10411,7 +10441,7 @@ msgid "Numbered list"
 msgstr ""
 
 #. js-lingui-id: b/j06W
-#: src/pages/settings/applications/SettingsApplicationRegistrationDetails.tsx
+#: src/pages/settings/applications/components/SettingsApplicationRegistrationContent.tsx
 #: src/pages/settings/ai/components/SettingsAIMCP.tsx
 msgid "OAuth"
 msgstr "OAuth"
@@ -10691,7 +10721,6 @@ msgid "Open Outlook"
 msgstr "Άνοιγμα με Outlook"
 
 #. js-lingui-id: bY2Xkv
-#: src/modules/ui/layout/page-header/components/PageHeaderToggleSidePanelButton.tsx
 #: src/modules/side-panel/components/SidePanelToggleButton.tsx
 msgid "Open side panel"
 msgstr "Άνοιγμα πλευρικού πάνελ"
@@ -10782,6 +10811,7 @@ msgstr "Οργάνωση"
 #: src/pages/settings/admin-panel/SettingsAdminUserDetail.tsx
 #: src/pages/settings/admin-panel/SettingsAdminIndicatorHealthStatus.tsx
 #: src/pages/settings/admin-panel/SettingsAdminConfigVariableDetails.tsx
+#: src/pages/settings/admin-panel/SettingsAdminApplicationRegistrationDetail.tsx
 #: src/pages/settings/admin-panel/SettingsAdminAiProviderDetail.tsx
 #: src/pages/settings/admin-panel/SettingsAdmin.tsx
 #: src/modules/settings/hooks/useSettingsNavigationItems.tsx
@@ -11694,11 +11724,6 @@ msgstr "Ετικέτα εγγραφής"
 msgid "Record Page"
 msgstr "Σελίδα εγγραφής"
 
-#. js-lingui-id: dSCufP
-#: src/modules/side-panel/pages/root/components/SidePanelRootPage.tsx
-msgid "Record Selection"
-msgstr "Επιλογή Εγγραφών"
-
 #. js-lingui-id: NxW0+c
 #: src/modules/side-panel/pages/page-layout/utils/getPageLayoutPageTitle.ts
 msgid "Record Table Settings"
@@ -12023,6 +12048,8 @@ msgstr "Επαναποστολή email"
 #: src/modules/side-panel/pages/page-layout/components/WidgetSettingsManageSection.tsx
 #: src/modules/side-panel/pages/page-layout/components/RegularTabSettingsContent.tsx
 #: src/modules/side-panel/pages/page-layout/components/CanvasTabSettingsContent.tsx
+#: src/modules/settings/data-model/object-details/components/tabs/ObjectLayout.tsx
+#: src/modules/settings/data-model/object-details/components/tabs/ObjectLayout.tsx
 msgid "Reset"
 msgstr "Επαναφορά"
 
@@ -12032,15 +12059,15 @@ msgstr "Επαναφορά"
 msgid "Reset 2FA"
 msgstr "Επαναφορά 2FA"
 
+#. js-lingui-id: kw0Yv1
+#: src/modules/settings/data-model/object-details/components/tabs/ObjectLayout.tsx
+msgid "Reset all overrides on this layout to return it to the app default"
+msgstr ""
+
 #. js-lingui-id: YdI8A2
 #: src/modules/command-menu-item/edit/components/CommandMenuItemOptionsDropdown.tsx
 msgid "Reset label to default"
 msgstr ""
-
-#. js-lingui-id: 1IWc1n
-#: src/modules/side-panel/pages/root/components/SidePanelResetContextToSelectionButton.tsx
-msgid "Reset to"
-msgstr "Επαναφορά σε"
 
 #. js-lingui-id: L+rMC9
 #: src/modules/side-panel/pages/page-layout/components/WidgetSettingsManageSection.tsx
@@ -12049,6 +12076,8 @@ msgstr "Επαναφορά σε"
 #: src/modules/side-panel/pages/page-layout/components/RegularTabSettingsContent.tsx
 #: src/modules/side-panel/pages/page-layout/components/CanvasTabSettingsContent.tsx
 #: src/modules/side-panel/pages/page-layout/components/CanvasTabSettingsContent.tsx
+#: src/modules/settings/data-model/object-details/components/tabs/ObjectLayout.tsx
+#: src/modules/settings/data-model/object-details/components/tabs/ObjectLayout.tsx
 #: src/modules/settings/data-model/fields/forms/address/components/SettingsDataModelFieldAddressForm.tsx
 #: src/modules/command-menu-item/edit/components/SidePanelCommandMenuItemEditPage.tsx
 msgid "Reset to default"
@@ -12314,6 +12343,11 @@ msgstr "Εκτελείται {formattedName}"
 msgid "Running function"
 msgstr "Εκτέλεση λειτουργίας"
 
+#. js-lingui-id: SoR81K
+#: src/modules/command-menu-item/engine-command/hooks/useEnrichHeadlessCommandContextApiWithWorkflowVersionTriggerInformation.ts
+msgid "Running workflows on all records is not yet supported. Please select records manually."
+msgstr ""
+
 #. js-lingui-id: LTC198
 #: src/modules/ai/components/CodeExecutionDisplay.tsx
 msgid "Running..."
@@ -12396,11 +12430,6 @@ msgstr "SDK"
 #: src/modules/command-menu-item/engine-command/constants/EngineComponentKeyHeadlessComponentMap.tsx
 msgid "Search"
 msgstr "Αναζήτηση"
-
-#. js-lingui-id: aOQ/Fi
-#: src/modules/side-panel/pages/root/components/SidePanelRootPage.tsx
-msgid "Search ''{sidePanelSearch}'' with..."
-msgstr "Αναζήτηση ''{sidePanelSearch}'' με..."
 
 #. js-lingui-id: g2dQp/
 #: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelPermissionMeValueSelect.tsx
@@ -14202,6 +14231,11 @@ msgstr "Δεν υπάρχει δραστηριότητα που να σχετί�
 msgid "There was an error while updating password."
 msgstr "Παρουσιάστηκε σφάλμα κατά την ενημέρωση του κωδικού πρόσβασης."
 
+#. js-lingui-id: vg1S0X
+#: src/pages/settings/applications/tabs/SettingsApplicationsDeveloperTab.tsx
+msgid "These apps are not vetted. Use at your own risk."
+msgstr ""
+
 #. js-lingui-id: AUV+TY
 #: src/modules/ai/components/ThinkingStepsDisplay.tsx
 msgid "Thinking"
@@ -14230,6 +14264,11 @@ msgstr "Αυτός ο λογαριασμός είναι συνδεδεμένος
 #. js-lingui-id: h4vGCD
 #: src/modules/workflow/workflow-steps/workflow-actions/find-records-action/components/WorkflowEditActionFindRecords.tsx
 msgid "This action can return up to {maxRecordsFormatted} records."
+msgstr ""
+
+#. js-lingui-id: 2xOCJW
+#: src/modules/settings/data-model/object-details/components/tabs/ObjectLayout.tsx
+msgid "This action cannot be undone."
 msgstr ""
 
 #. js-lingui-id: Ox1hE7
@@ -14341,6 +14380,11 @@ msgstr "Αυτό το κλειδί πρέπει να οριστεί στο σώ�
 #: src/pages/settings/admin-panel/SettingsAdminAiProviderDetail.tsx
 msgid "This model will be removed from the provider. You can re-add it later."
 msgstr "Αυτό το μοντέλο θα αφαιρεθεί από τον πάροχο. Μπορείτε να το προσθέσετε ξανά αργότερα."
+
+#. js-lingui-id: NCA55L
+#: src/modules/page-layout/widgets/components/StandaloneWidgetPlaceholder.tsx
+msgid "This page has no content"
+msgstr ""
 
 #. js-lingui-id: R/PuIn
 #: src/pages/settings/admin-panel/SettingsAdminNewAiProvider.tsx
@@ -15086,7 +15130,7 @@ msgstr ""
 #: src/modules/ui/field/display/components/ActorDisplay.tsx
 #: src/modules/side-panel/components/SidePanelContextChip.tsx
 #: src/modules/settings/admin-panel/components/SettingsAdminWorkspaceContent.tsx
-#: src/modules/page-layout/components/PageLayoutTabsRenderer.tsx
+#: src/modules/page-layout/hooks/usePageLayoutAddTabStrategy.ts
 #: src/modules/object-record/record-title-cell/components/RecordTitleFullNameFieldDisplay.tsx
 #: src/modules/object-record/record-title-cell/components/RecordTitleCellTextFieldDisplay.tsx
 #: src/modules/object-record/components/RecordChip.tsx
@@ -16417,10 +16461,10 @@ msgstr "Οι δυνατότητες Enterprise θα απενεργοποιηθο
 msgid "Your enterprise features will remain active until {cancelAtDate}."
 msgstr "Οι δυνατότητες Enterprise θα παραμείνουν ενεργές έως {cancelAtDate}."
 
-#. js-lingui-id: 69Siss
-#: src/modules/information-banner/components/enterprise/InformationBannerLegacyEnterpriseKey.tsx
-msgid "Your enterprise key format is deprecated. Please activate a new key to keep enterprise features."
-msgstr "Η μορφή του κλειδιού Enterprise δεν υποστηρίζεται πλέον. Ενεργοποιήστε ένα νέο κλειδί για να διατηρήσετε τις δυνατότητες Enterprise."
+#. js-lingui-id: 5TsUUL
+#: src/modules/information-banner/components/enterprise/InformationBannerInvalidEnterpriseKey.tsx
+msgid "Your enterprise key is no longer valid. Activate a new key to continue using enterprise features."
+msgstr ""
 
 #. js-lingui-id: NTpA4U
 #: src/pages/settings/enterprise/SettingsEnterprise.tsx

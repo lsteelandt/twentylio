@@ -1,9 +1,6 @@
+import { IllustrationMount } from '@/illustrations';
 import { theme } from '@/theme';
 import { styled } from '@linaria/react';
-
-import { PartnerHalftoneOverlay } from './PartnerHalftoneOverlay';
-
-const HERO_IMAGE_URL = '/images/partner/hero/partners-hero.webp';
 
 const StyledContainer = styled.div`
   background-color: ${theme.colors.secondary.background[100]};
@@ -22,7 +19,7 @@ const StyledContainer = styled.div`
 export function PartnerVisual() {
   return (
     <StyledContainer>
-      <PartnerHalftoneOverlay imageUrl={HERO_IMAGE_URL} />
+      <IllustrationMount illustration="heroPartnerHalftone" />
     </StyledContainer>
   );
 }

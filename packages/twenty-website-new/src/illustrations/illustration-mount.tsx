@@ -1,5 +1,7 @@
 'use client';
 
+import { VisibleWhenTabActive } from '@/components/VisibleWhenTabActive';
+import { WebGlWhenInViewport } from '@/components/WebGlWhenInViewport';
 import {
   ILLUSTRATIONS,
   type IllustrationId,
@@ -11,6 +13,13 @@ type IllustrationMountProps = {
 
 export function IllustrationMount({ illustration }: IllustrationMountProps) {
   const IllustrationComponent = ILLUSTRATIONS[illustration];
+  const detachWebGlGateFromLayout = illustration === 'footerBackground';
 
-  return <IllustrationComponent />;
+  return (
+    <VisibleWhenTabActive>
+      <WebGlWhenInViewport detachFromLayout={detachWebGlGateFromLayout}>
+        <IllustrationComponent />
+      </WebGlWhenInViewport>
+    </VisibleWhenTabActive>
+  );
 }

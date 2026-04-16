@@ -2,7 +2,7 @@
 
 import { Body, Heading, IconButton } from '@/design-system/components';
 import { ArrowRightIcon } from '@/icons';
-import { THREE_CARDS_ILLUSTRATIONS } from '@/illustrations';
+import { IllustrationMount } from '@/illustrations';
 import type { ThreeCardsIllustrationCardType } from '@/sections/ThreeCards/types';
 import { theme } from '@/theme';
 import { styled } from '@linaria/react';
@@ -43,7 +43,7 @@ const CardEmbed = styled.div`
 `;
 
 const CardFooter = styled.footer`
-  align-items: start;
+  align-items: center;
   column-gap: ${theme.spacing(2)};
   display: grid;
   grid-template-columns: auto auto auto 1fr;
@@ -66,10 +66,6 @@ const CardBodyCell = styled.div`
   min-width: 0;
 `;
 
-const CardBody = styled(Body)`
-  color: ${theme.colors.primary.text[80]};
-`;
-
 type IllustrationCardProps = {
   illustrationCard: ThreeCardsIllustrationCardType;
   variant?: 'shaped' | 'simple';
@@ -79,9 +75,6 @@ export function IllustrationCard({
   illustrationCard,
   variant = 'shaped',
 }: IllustrationCardProps) {
-  const ThreeCardsIllustration =
-    THREE_CARDS_ILLUSTRATIONS[illustrationCard.illustration];
-
   return (
     <IllustrationCardContainer>
       {variant === 'shaped' && (
@@ -98,11 +91,11 @@ export function IllustrationCard({
       />
       <CardRule />
       <CardEmbed>
-        <ThreeCardsIllustration />
+        <IllustrationMount illustration={illustrationCard.illustration} />
       </CardEmbed>
       <CardRule />
       <CardBodyCell>
-        <CardBody body={illustrationCard.body} size="sm" weight="regular" />
+        <Body body={illustrationCard.body} size="sm" weight="regular" />
       </CardBodyCell>
 
       {illustrationCard.attribution && (

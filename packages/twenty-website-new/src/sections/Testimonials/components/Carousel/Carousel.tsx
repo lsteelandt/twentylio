@@ -162,6 +162,7 @@ export function Carousel({ children, eyebrow, testimonials }: CarouselProps) {
   const hasPrevious = index > 0;
   const hasNext = index < total - 1;
   const current = testimonials[index];
+  const authorSecondaryLine = current.author.designation ?? null;
 
   const goToPrevious = () => {
     if (hasPrevious) setIndex(index - 1);
@@ -246,12 +247,14 @@ export function Carousel({ children, eyebrow, testimonials }: CarouselProps) {
               size="sm"
               weight="medium"
             />
-            <Body
-              as="span"
-              body={current.author.designation}
-              size="xs"
-              weight="light"
-            />
+            {authorSecondaryLine ? (
+              <Body
+                as="span"
+                body={authorSecondaryLine}
+                size="xs"
+                weight="light"
+              />
+            ) : null}
           </AuthorBlock>
         </FooterRow>
       </RightColumn>

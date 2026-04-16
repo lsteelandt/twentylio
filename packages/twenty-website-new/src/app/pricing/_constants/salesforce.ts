@@ -148,7 +148,7 @@ export const SALESFORCE_DATA: SalesforceDataType = {
         rightLabel: 'Out of stock',
         tooltip: {
           title: 'Out of stock',
-          body: 'Your data prefers someone else\'s servers.',
+          body: 'Self-hosting, now for rent!',
         },
       },
       {
@@ -202,7 +202,8 @@ export const SALESFORCE_DATA: SalesforceDataType = {
           body: 'become a genius!',
           titleBar: SALESFORCE_POPUP_TITLE,
         },
-        rightLabel: '+$75/user per month',
+        rightLabel: '+$75/user per month\nSwitch to enterprise!',
+        sharedCostKey: 'enterprise-plan',
       },
       {
         cost: 75,
@@ -219,17 +220,17 @@ export const SALESFORCE_DATA: SalesforceDataType = {
       },
     ],
     basePriceAmount: 100,
-    promoTag: 'Best for\nSalesforce',
+    promoTag: '1‑800‑YES‑SOFTWARE',
     featureSectionHeading: 'Add-ons',
     productIconAlt: 'Retro help document icon',
-    productIconSrc: '/images/pricing/salesforce/help-icon.png',
+    productIconSrc: '/images/pricing/salesforce/help-icon.webp',
     priceSuffix: ' / seat / month - billed yearly',
-    productTitle: 'Salesforce Pro',
+    productTitle: 'Salesfarce Pro',
     secondaryCtaNote: 'More options available!',
     secondaryCtaHref:
       'https://www.salesforce.com/en-us/wp-content/uploads/sites/4/documents/pricing/all-add-ons.pdf',
     secondaryCtaLabel: 'Check more add-ons',
     totalPriceLabel: 'total per month with fixed cost',
-    windowTitle: 'Salesforce Pro pricing',
+    windowTitle: 'Salesfarce Add-on Center',
   },
 };
