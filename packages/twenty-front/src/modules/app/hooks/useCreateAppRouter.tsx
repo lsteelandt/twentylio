@@ -28,6 +28,14 @@ const RecordShowPage = lazy(() =>
   })),
 );
 
+const Account360View = lazy(() =>
+  import('~/modules/companies/account-360/Account360View').then(
+    (module) => ({
+      default: module.Account360View,
+    }),
+  ),
+);
+
 const SignInUp = lazy(() =>
   import('~/pages/auth/SignInUp').then((module) => ({
     default: module.SignInUp,
@@ -227,6 +235,10 @@ export const useCreateAppRouter = (
             }
           />
           <Route
+            path={AppPath.Account360View}
+            element={
+              <LazyRoute>
+                <Account360View />
             path={AppPath.PageLayoutPage}
             element={
               <LazyRoute>

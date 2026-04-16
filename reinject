@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+API_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1YjQwZmM5MS1hZGM4LTQ3NmUtYmQ5MC1lNjc3YmI4YmFkNWEiLCJ0eXBlIjoiQVBJX0tFWSIsIndvcmtzcGFjZUlkIjoiNWI0MGZjOTEtYWRjOC00NzZlLWJkOTAtZTY3N2JiOGJhZDVhIiwiaWF0IjoxNzc1NzQxNDM2LCJleHAiOjQ5MjkzNDUwMzUsImp0aSI6IjI1ZmQ4ZjBjLTliM2ItNDMyYy04MjhlLTZjY2M1ZmUxOTZjMyJ9.2GoI7fOXr9AJZqmGugR0EqgX2hemYWfinXiy81uBptE"
+
+psql -t -A postgres://postgres:postgres@localhost:5432/default <<'SQL' | while read id; do
+SELECT id FROM workspace_5ehknseipv8oarw8pha78popm.person
+WHERE "deletedAt" IS NULL AND "sirenCompte" IS NOT NULL;
+SQL
+  curl -s -X POST http://localhost:3000/api \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer ${API_KEY}" \
+    -d "{\"query\":\"mutation { updatePerson(id: \\\"${id}\\\", input: { city: \\\"\\\" }) { id } }\"}" \
+    > /dev/null
+  echo "Réinjecté: ${id}"
+done

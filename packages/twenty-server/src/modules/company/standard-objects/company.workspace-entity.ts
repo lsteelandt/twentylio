@@ -40,6 +40,7 @@ export class CompanyWorkspaceEntity {
   annualRecurringRevenue: CurrencyMetadata | null;
   address: AddressMetadata;
   idealCustomerProfile: boolean;
+  suspectScore: number | null;
   position: number;
   createdBy: ActorMetadata;
   updatedBy: ActorMetadata;

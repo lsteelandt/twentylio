@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+STATE_DIR=".crm"
+LOG_DIR=".crm/logs"
+
+echo "🛑 Arrêt de Twenty (front / server / worker) et Redis local"
+
+stop_proc() {
+  local name="$1"
+  local base="$2"
+  local pid_file="$STATE_DIR/$base.pid"
+
+  if [ -f "$pid_file" ]; then
+    local pid
+    pid="$(cat "$pid_file" 2>/dev/null || echo "")"
+
+    if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
+      echo "▶️  Arrêt de $name (PID $pid)..."
+      kill "$pid" 2>/dev/null || true
+
+      for i in {1..10}; do
+        if kill -0 "$pid" 2>/dev/null; then
+          sleep 1
+        else
+          break
+        fi
+      done
+
+      if kill -0 "$pid" 2>/dev/null; then
+        echo "⚠️  $name ne s'est pas arrêté, envoi SIGKILL..."
+        kill -9 "$pid" 2>/dev/null || true
+      fi
+
+      echo "✅ $name arrêté"
+    else
+      echo "ℹ️  $name non actif (PID invalide ou déjà mort)"
+    fi
+
+    rm -f "$pid_file"
+  else
+    echo "ℹ️  Aucun fichier PID pour $name ($pid_file)"
+  fi
+}
+
+# Arrêt des apps Node
+stop_proc "front"  "front"
+stop_proc "server" "server"
+stop_proc "worker" "worker"
+
+# Arrêt de Redis uniquement s'il a été lancé par crm-start
+if [ -f "$STATE_DIR/redis.pid" ]; then
+  pid="$(cat "$STATE_DIR/redis.pid" 2>/dev/null || echo "")"
+  if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
+    echo "▶️  Arrêt de redis (PID $pid)..."
+    kill "$pid" 2>/dev/null || true
+
+    for i in {1..10}; do
+      if kill -0 "$pid" 2>/dev/null; then
+        sleep 1
+      else
+        break
+      fi
+    done
+
+    if kill -0 "$pid" 2>/dev/null; then
+      echo "⚠️  redis ne s'est pas arrêté, envoi SIGKILL..."
+      kill -9 "$pid" 2>/dev/null || true
+    fi
+
+    echo "✅ redis arrêté"
+  else
+    echo "ℹ️  redis.pid présent mais process introuvable"
+  fi
+  rm -f "$STATE_DIR/redis.pid"
+else
+  echo "ℹ️  Aucun redis.pid, je n'arrête pas Redis (pour ne pas tuer une autre instance)"
+fi
+
+echo "ℹ️  PostgreSQL est géré par brew services."
+echo "    Pour le stopper manuellement : brew services stop postgresql@16"
+
+echo
+echo "✅ crm-stop terminé"

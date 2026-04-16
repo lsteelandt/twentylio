@@ -1,9 +1,8 @@
 import { useParams } from 'react-router-dom';
 
-import { SidePanelToggleButton } from '@/side-panel/components/SidePanelToggleButton';
+import { TimelineActivityContext } from '@/activities/timeline-activities/contexts/TimelineActivityContext';
 import { RecordShowCommandMenu } from '@/command-menu-item/components/RecordShowCommandMenu';
 import { CommandMenuComponentInstanceContext } from '@/command-menu/states/contexts/CommandMenuComponentInstanceContext';
-import { TimelineActivityContext } from '@/activities/timeline-activities/contexts/TimelineActivityContext';
 import { MAIN_CONTEXT_STORE_INSTANCE_ID } from '@/context-store/constants/MainContextStoreInstanceId';
 import { ContextStoreComponentInstanceContext } from '@/context-store/states/contexts/ContextStoreComponentInstanceContext';
 import { isLayoutCustomizationModeEnabledState } from '@/layout-customization/states/isLayoutCustomizationModeEnabledState';
@@ -13,10 +12,12 @@ import { PageLayoutRecordPageRenderer } from '@/object-record/record-show/compon
 import { RecordShowPageSSESubscribeEffect } from '@/object-record/record-show/components/RecordShowPageSSESubscribeEffect';
 import { useRecordShowPage } from '@/object-record/record-show/hooks/useRecordShowPage';
 import { computeRecordShowComponentInstanceId } from '@/object-record/record-show/utils/computeRecordShowComponentInstanceId';
+import { SidePanelToggleButton } from '@/side-panel/components/SidePanelToggleButton';
 import { PageContainer } from '@/ui/layout/page/components/PageContainer';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { RecordShowPageHeader } from '~/pages/object-record/RecordShowPageHeader';
 import { RecordShowPageTitle } from '~/pages/object-record/RecordShowPageTitle';
+import { Account360ViewButton } from '@/companies/account-360/components/Account360ViewButton';
 
 export const RecordShowPage = () => {
   const isLayoutCustomizationModeEnabled = useAtomStateValue(
@@ -57,6 +58,9 @@ export const RecordShowPage = () => {
             >
               <RecordShowCommandMenu />
               {!isLayoutCustomizationModeEnabled && <SidePanelToggleButton />}
+              {objectNameSingular === 'company' && (
+                <Account360ViewButton objectRecordId={objectRecordId} />
+              )}
             </RecordShowPageHeader>
             <MainContainerLayoutWithSidePanel>
               <TimelineActivityContext.Provider

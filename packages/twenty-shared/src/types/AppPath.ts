@@ -23,6 +23,7 @@ export enum AppPath {
 
   RecordIndexPage = '/objects/:objectNamePlural',
   RecordShowPage = '/object/:objectNameSingular/:objectRecordId',
+  Account360View = '/object/:objectNameSingular/:objectRecordId/360',
   PageLayoutPage = '/page/:pageLayoutId',
 
   Settings = `settings`,

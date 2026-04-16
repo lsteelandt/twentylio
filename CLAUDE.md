@@ -1,223 +1,82 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Ce fichier fournit des instructions à Claude Code pour travailler dans ce dépôt.
 
-## Project Overview
+## Identité du projet
 
-Twenty is an open-source CRM built with modern technologies in a monorepo structure. The codebase is organized as an Nx workspace with multiple packages.
+- Ce dépôt est un fork de Twenty utilisé pour construire un CRM personnalisé adapté à mes besoins métier.
+- L’objectif n’est pas de réécrire Twenty depuis zéro, mais de le personnaliser de manière incrémentale.
+- Préserver autant que possible la compatibilité avec l’upstream.
 
-## Key Commands
+## Mode de travail
 
-### Development
-```bash
-# Start development environment (frontend + backend + worker)
-yarn start
+- Pour tout changement non trivial, utiliser OpenSpec d’abord.
+- Workflow obligatoire : proposal -> validate -> apply -> archive.
+- Ne pas implémenter directement les changements multi-fichiers, architecturaux, de schéma, de workflow ou d’interface sans spec approuvée.
 
-# Individual package development
-npx nx start twenty-front     # Start frontend dev server
-npx nx start twenty-server    # Start backend server
-npx nx run twenty-server:worker  # Start background worker
-```
+## Périmètre du monorepo
 
-### Testing
-```bash
-# Preferred: run a single test file (fast)
-npx jest path/to/test.test.ts --config=packages/PROJECT/jest.config.mjs
+- Frontend : `packages/twenty-front/`
+- Backend : `packages/twenty-server/`
+- Site web : `packages/twenty-website-new/`
+- Intégration Zapier : `packages/twenty-zapier/`
 
-# Run all tests for a package
-npx nx test twenty-front      # Frontend unit tests
-npx nx test twenty-server     # Backend unit tests
-npx nx run twenty-server:test:integration:with-db-reset  # Integration tests with DB reset
-# To run an indivual test or a pattern of tests, use the following command:
-cd packages/{workspace} && npx jest "pattern or filename"
+## Discipline de périmètre
 
-# Storybook
-npx nx storybook:build twenty-front
-npx nx storybook:test twenty-front
+- Travailler uniquement dans le package concerné par la demande.
+- Ne pas modifier plusieurs packages sauf si la spec le justifie explicitement.
+- Privilégier les changements petits, locaux et réversibles.
 
-# When testing the UI end to end, click on "Continue with Email" and use the prefilled credentials.
-```
+## Discipline de fork
 
-### Code Quality
-```bash
-# Linting (diff with main - fastest, always prefer this)
-npx nx lint:diff-with-main twenty-front
-npx nx lint:diff-with-main twenty-server
-npx nx lint:diff-with-main twenty-front --configuration=fix  # Auto-fix
+- Préférer l’extension et la personnalisation additive aux réécritures destructrices.
+- Ne pas renommer ou déplacer de répertoires majeurs sans demande explicite dans une spec approuvée.
+- Signaler avant tout changement cassant, fortement divergent de l’upstream, ou coûteux à maintenir.
 
-# Linting (full project - slower, use only when needed)
-npx nx lint twenty-front
-npx nx lint twenty-server
+## Discipline d’architecture
 
-# Type checking
-npx nx typecheck twenty-front
-npx nx typecheck twenty-server
+- Toujours inspecter d’abord le module existant, le nommage, les hooks, les patterns GraphQL et les tests avant de modifier le code.
+- Respecter les conventions existantes avant d’introduire de nouvelles abstractions.
+- Réutiliser au maximum les composants, services et patterns de domaine déjà présents.
 
-# Format code
-npx nx fmt twenty-front
-npx nx fmt twenty-server
-```
+## Validation
 
-### Build
-```bash
-# Build packages (twenty-shared must be built first)
-npx nx build twenty-shared
-npx nx build twenty-front
-npx nx build twenty-server
-```
+- Avant de terminer, exécuter les commandes de lint, test et build pertinentes pour les packages impactés.
+- Si le comportement change, ajouter ou mettre à jour les plus petits tests pertinents.
+- Ne jamais déclarer un travail terminé s’il n’a pas été validé.
 
-### Database Operations
-```bash
-# Database management
-npx nx database:reset twenty-server         # Reset database
-npx nx run twenty-server:database:init:prod # Initialize database
-npx nx run twenty-server:database:migrate:prod # Run instance commands (fast only)
+## OpenSpec
 
-# Generate an instance command (fast or slow)
-npx nx run twenty-server:database:migrate:generate --name <name> --type <fast|slow>
-```
+- La source de vérité des spécifications se trouve dans `openspec/`.
+- Lire `openspec/project.md` et les specs concernées avant toute implémentation.
 
-### Database Inspection (Postgres MCP)
+## Discipline UI / Design
 
-A read-only Postgres MCP server is configured in `.mcp.json`. Use it to:
-- Inspect workspace data, metadata, and object definitions while developing
-- Verify migration results (columns, types, constraints) after running migrations
-- Explore the multi-tenant schema structure (core, metadata, workspace-specific schemas)
-- Debug issues by querying raw data to confirm whether a bug is frontend, backend, or data-level
-- Inspect metadata tables to debug GraphQL schema generation issues
+- Le design doit partir de la base existante du CRM Twenty.
+- Réutiliser en priorité les composants d’interface, patterns de navigation et styles déjà présents.
+- Ne pas introduire de nouveau design system ou de rupture visuelle majeure sans spec OpenSpec approuvée.
+- Toute nouvelle vue ou composant doit s’intégrer naturellement dans l’expérience actuelle de Twenty.
 
-This server is read-only — for write operations (reset, migrations, sync), use the CLI commands above.
+<!-- nx configuration start-->
+<!-- Leave the start & end comments to automatically receive updates. -->
 
-### GraphQL
-```bash
-# Generate GraphQL types (run after schema changes)
-npx nx run twenty-front:graphql:generate
-npx nx run twenty-front:graphql:generate --configuration=metadata
-```
+## General Guidelines for working with Nx
 
-## Architecture Overview
+- For navigating/exploring the workspace, invoke the `nx-workspace` skill first - it has patterns for querying projects, targets, and dependencies
+- When running tasks (for example build, lint, test, e2e, etc.), always prefer running the task through `nx` (i.e. `nx run`, `nx run-many`, `nx affected`) instead of using the underlying tooling directly
+- Prefix nx commands with the workspace's package manager (e.g., `pnpm nx build`, `npm exec nx test`) - avoids using globally installed CLI
+- You have access to the Nx MCP server and its tools, use them to help the user
+- For Nx plugin best practices, check `node_modules/@nx/<plugin>/PLUGIN.md`. Not all plugins have this file - proceed without it if unavailable.
+- NEVER guess CLI flags - always check nx_docs or `--help` first when unsure
 
-### Tech Stack
-- **Frontend**: React 18, TypeScript, Jotai (state management), Linaria (styling), Vite
-- **Backend**: NestJS, TypeORM, PostgreSQL, Redis, GraphQL (with GraphQL Yoga)
-- **Monorepo**: Nx workspace managed with Yarn 4
+## Scaffolding & Generators
 
-### Package Structure
-```
-packages/
-├── twenty-front/          # React frontend application
-├── twenty-server/         # NestJS backend API
-├── twenty-ui/             # Shared UI components library
-├── twenty-shared/         # Common types and utilities
-├── twenty-emails/         # Email templates with React Email
-├── twenty-website/        # Next.js documentation website
-├── twenty-zapier/         # Zapier integration
-└── twenty-e2e-testing/    # Playwright E2E tests
-```
+- For scaffolding tasks (creating apps, libs, project structure, setup), ALWAYS invoke the `nx-generate` skill FIRST before exploring or calling MCP tools
 
-### Key Development Principles
-- **Functional components only** (no class components)
-- **Named exports only** (no default exports)
-- **Types over interfaces** (except when extending third-party interfaces)
-- **String literals over enums** (except for GraphQL enums)
-- **No 'any' type allowed** — strict TypeScript enforced
-- **Event handlers preferred over useEffect** for state updates
-- **Props down, events up** — unidirectional data flow
-- **Composition over inheritance**
-- **No abbreviations** in variable names (`user` not `u`, `fieldMetadata` not `fm`)
+## When to use nx_docs
 
-### Naming Conventions
-- **Variables/functions**: camelCase
-- **Constants**: SCREAMING_SNAKE_CASE
-- **Types/Classes**: PascalCase (suffix component props with `Props`, e.g. `ButtonProps`)
-- **Files/directories**: kebab-case with descriptive suffixes (`.component.tsx`, `.service.ts`, `.entity.ts`, `.dto.ts`, `.module.ts`)
-- **TypeScript generics**: descriptive names (`TData` not `T`)
+- USE for: advanced config options, unfamiliar flags, migration guides, plugin configuration, edge cases
+- DON'T USE for: basic generator syntax (`nx g @nx/react:app`), standard commands, things you already know
+- The `nx-generate` skill handles generator discovery internally - don't call nx_docs just to look up generator syntax
 
-### File Structure
-- Components under 300 lines, services under 500 lines
-- Components in their own directories with tests and stories
-- Use `index.ts` barrel exports for clean imports
-- Import order: external libraries first, then internal (`@/`), then relative
-
-### Comments
-- Use short-form comments (`//`), not JSDoc blocks
-- Explain WHY (business logic), not WHAT
-- Do not comment obvious code
-- Multi-line comments use multiple `//` lines, not `/** */`
-
-### State Management
-- **Jotai** for global state: atoms for primitive state, selectors for derived state, atom families for dynamic collections
-- Component-specific state with React hooks (`useState`, `useReducer` for complex logic)
-- GraphQL cache managed by Apollo Client
-- Use functional state updates: `setState(prev => prev + 1)`
-
-### Backend Architecture
-- **NestJS modules** for feature organization
-- **TypeORM** for database ORM with PostgreSQL
-- **GraphQL** API with code-first approach
-- **Redis** for caching and session management
-- **BullMQ** for background job processing
-
-### Database & Upgrade Commands
-- **PostgreSQL** as primary database
-- **Redis** for caching and sessions
-- **ClickHouse** for analytics (when enabled)
-- When changing entity files, generate an **instance command** (`database:migrate:generate --name <name> --type <fast|slow>`)
-- **Fast** instance commands handle schema changes; **slow** ones add a `runDataMigration` step for data backfills
-- **Workspace commands** iterate over all active/suspended workspaces for per-workspace upgrades
-- Commands use `@RegisteredInstanceCommand` and `@RegisteredWorkspaceCommand` decorators for automatic discovery
-- Include both `up` and `down` logic in instance commands
-- Never delete or rewrite committed instance command `up`/`down` logic
-- See `packages/twenty-server/docs/UPGRADE_COMMANDS.md` for full documentation
-
-### Utility Helpers
-Use existing helpers from `twenty-shared` instead of manual type guards:
-- `isDefined()`, `isNonEmptyString()`, `isNonEmptyArray()`
-
-## Development Workflow
-
-IMPORTANT: Use Context7 for code generation, setup or configuration steps, or library/API documentation. Automatically use the Context7 MCP tools to resolve library IDs and get library docs without waiting for explicit requests.
-
-### Before Making Changes
-1. Always run linting (`lint:diff-with-main`) and type checking after code changes
-2. Test changes with relevant test suites (prefer single-file test runs)
-3. Ensure instance commands are generated for entity changes (`database:migrate:generate`)
-4. Check that GraphQL schema changes are backward compatible
-5. Run `graphql:generate` after any GraphQL schema changes
-
-### Code Style Notes
-- Use **Linaria** for styling with zero-runtime CSS-in-JS (styled-components pattern)
-- Follow **Nx** workspace conventions for imports
-- Use **Lingui** for internationalization
-- Apply security first, then formatting (sanitize before format)
-
-### Testing Strategy
-- **Test behavior, not implementation** — focus on user perspective
-- **Test pyramid**: 70% unit, 20% integration, 10% E2E
-- Query by user-visible elements (text, roles, labels) over test IDs
-- Use `@testing-library/user-event` for realistic interactions
-- Descriptive test names: "should [behavior] when [condition]"
-- Clear mocks between tests with `jest.clearAllMocks()`
-
-## Dev Environment Setup
-
-All dev environments (Claude Code web, Cursor, local) use one script:
-
-```bash
-bash packages/twenty-utils/setup-dev-env.sh
-```
-
-This handles everything: starts Postgres + Redis (auto-detects local services vs Docker), creates databases, and copies `.env` files. Idempotent — safe to run multiple times.
-
-- `--docker` — force Docker mode (uses `packages/twenty-docker/docker-compose.dev.yml`)
-- `--down` — stop services
-- `--reset` — wipe data and restart fresh
-- **Skip the setup script** for tasks that only read code — architecture questions, code review, documentation, etc.
-
-**Note:** CI workflows (GitHub Actions) manage services via Actions service containers and run setup steps individually — they don't use this script.
-
-## Important Files
-- `nx.json` - Nx workspace configuration with task definitions
-- `tsconfig.base.json` - Base TypeScript configuration
-- `package.json` - Root package with workspace definitions
-- `.cursor/rules/` - Detailed development guidelines and best practices
+<!-- nx configuration end-->

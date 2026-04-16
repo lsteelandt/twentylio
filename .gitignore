@@ -54,3 +54,11 @@ TRANSLATION_QA_REPORT.md
 .playwright-mcp/
 .playwright-cli/
 output/playwright/
+
+.nx/polygraph
+.claude/worktrees
+.claude/settings.local.json
+.claude/commands
+.claude/skills
+
+.crm/*

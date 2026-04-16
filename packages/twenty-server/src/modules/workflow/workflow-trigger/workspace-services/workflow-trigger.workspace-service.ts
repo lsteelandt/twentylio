@@ -477,6 +477,7 @@ export class WorkflowTriggerWorkspaceService {
     switch (workflowVersion.trigger.type) {
       case WorkflowTriggerType.MANUAL:
       case WorkflowTriggerType.WEBHOOK:
+      case WorkflowTriggerType.VIEW_EVENT:
         return;
       case WorkflowTriggerType.DATABASE_EVENT: {
         const settings = workflowVersion.trigger
@@ -555,6 +556,7 @@ export class WorkflowTriggerWorkspaceService {
         return;
       case WorkflowTriggerType.MANUAL:
       case WorkflowTriggerType.WEBHOOK:
+      case WorkflowTriggerType.VIEW_EVENT:
         return;
       default:
         assertNever(workflowVersion.trigger);

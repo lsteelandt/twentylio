@@ -2,9 +2,11 @@ import { RecordIndexCommandMenu } from '@/command-menu-item/components/RecordInd
 import { SidePanelToggleButton } from '@/side-panel/components/SidePanelToggleButton';
 import { MAIN_CONTEXT_STORE_INSTANCE_ID } from '@/context-store/constants/MainContextStoreInstanceId';
 import { contextStoreCurrentViewIdComponentState } from '@/context-store/states/contextStoreCurrentViewIdComponentState';
-import { contextStoreNumberOfSelectedRecordsComponentState } from '@/context-store/states/contextStoreNumberOfSelectedRecordsComponentState';
+import { contextStoreTargetedRecordsRuleComponentState } from '@/context-store/states/contextStoreTargetedRecordsRuleComponentState';
 import { isLayoutCustomizationModeEnabledState } from '@/layout-customization/states/isLayoutCustomizationModeEnabledState';
 import { useFilteredObjectMetadataItems } from '@/object-metadata/hooks/useFilteredObjectMetadataItems';
+import { Account360ViewButton } from '@/companies/account-360/components/Account360ViewButton';
+
 import { RecordIndexPageHeaderIcon } from '@/object-record/record-index/components/RecordIndexPageHeaderIcon';
 import { useRecordIndexContextOrThrow } from '@/object-record/record-index/contexts/RecordIndexContext';
 import { PageHeader } from '@/ui/layout/page/components/PageHeader';
@@ -35,9 +37,22 @@ export const RecordIndexPageHeader = () => {
   const { findObjectMetadataItemByNamePlural } =
     useFilteredObjectMetadataItems();
 
-  const contextStoreNumberOfSelectedRecords = useAtomComponentStateValue(
-    contextStoreNumberOfSelectedRecordsComponentState,
+  const contextStoreTargetedRecordsRule = useAtomComponentStateValue(
+    contextStoreTargetedRecordsRuleComponentState,
+    MAIN_CONTEXT_STORE_INSTANCE_ID,
   );
+
+  const contextStoreNumberOfSelectedRecords =
+    contextStoreTargetedRecordsRule.mode === 'selection'
+      ? contextStoreTargetedRecordsRule.selectedRecordIds.length
+      : 0;
+
+  const selectedRecordId =
+    contextStoreTargetedRecordsRule.mode === 'selection' &&
+    contextStoreTargetedRecordsRule.selectedRecordIds.length === 1
+      ? contextStoreTargetedRecordsRule.selectedRecordIds[0]
+      : undefined;
+
 
   const { objectNamePlural } = useRecordIndexContextOrThrow();
 
@@ -78,6 +93,9 @@ export const RecordIndexPageHeader = () => {
         <>
           <RecordIndexCommandMenu />
           {!isLayoutCustomizationModeEnabled && <SidePanelToggleButton />}
+          {selectedRecordId && (
+            <Account360ViewButton objectRecordId={selectedRecordId} />
+          )}
         </>
       )}
     </PageHeader>

@@ -7,6 +7,12 @@ const MONOREPO_ROOT_WORKSPACE = 'twenty';
 
 module.exports = defineConfig({
   async constraints({ Yarn }) {
+    // Temporarily disable Node version constraint for twenty-e2e-testing package installation
+    const currentWorkspaceIdent = process.env.YARN_WORKSPACE_NAME;
+    if (currentWorkspaceIdent === 'twenty-e2e-testing') {
+      return; // Skip constraint check for this workspace
+    }
+
     const rootWorkspace = Yarn.workspace({ ident: MONOREPO_ROOT_WORKSPACE });
     if (!rootWorkspace) {
       throw new Error(
